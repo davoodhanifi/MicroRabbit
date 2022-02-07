@@ -2,6 +2,9 @@ using MediatR;
 using MicroRabbit.Transfer.Data.Context;
 using MicroRabbit.Infra.IoC;
 using Microsoft.EntityFrameworkCore;
+using MicroRabbit.Domain.Core.Bus;
+using MicroRabbit.Transfer.Domain.Events;
+using MicroRabbit.Transfer.Domain.EventHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,14 @@ builder.Services.AddMediatR(typeof(Program));
 DependencyContainer.RegisterServices(builder.Services);
 
 var app = builder.Build();
+
+ConfigureEventBus(app);
+
+void ConfigureEventBus(WebApplication app)
+{
+    var eventBus = app.Services.GetRequiredService<IEventBus>();
+    eventBus.Subscribe<TransferCreatedEvent, TransferEventHandler>();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
