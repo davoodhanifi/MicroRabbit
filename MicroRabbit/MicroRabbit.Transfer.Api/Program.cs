@@ -28,14 +28,6 @@ DependencyContainer.RegisterServices(builder.Services);
 
 var app = builder.Build();
 
-ConfigureEventBus(app);
-
-void ConfigureEventBus(WebApplication app)
-{
-    var eventBus = app.Services.GetRequiredService<IEventBus>();
-    eventBus.Subscribe<TransferCreatedEvent, TransferEventHandler>();
-}
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -48,5 +40,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+ConfigureEventBus(app);
+
+void ConfigureEventBus(WebApplication app)
+{
+    var eventBus = app.Services.GetRequiredService<IEventBus>();
+    eventBus.Subscribe<TransferCreatedEvent, TransferEventHandler>();
+}
 
 app.Run();

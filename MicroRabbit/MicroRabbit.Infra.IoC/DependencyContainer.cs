@@ -30,6 +30,9 @@ namespace MicroRabbit.Infra.IoC
                 return new RabbitMQBus(sp.GetService<IMediator>(), scopeFactory);
             });
 
+            // Subscriptions
+            services.AddTransient<TransferEventHandler>();
+
             // Domain Banking Commands
             services.AddTransient<IRequestHandler<CreateTransferCommand, bool>, TransferCommandHandler>();
 
